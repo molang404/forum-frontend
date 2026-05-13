@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { Link } from "react-router";
-import { IoChatbubbles, IoMoon } from "react-icons/io5";
+import { IoChatbubbles, IoMoon, IoSunny } from "react-icons/io5";
 import Button from "../common/button/Button.tsx";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/theme/ThemeContext.ts";
 
 const HeaderContainer = styled.div`
     height: 64px;
@@ -39,21 +41,29 @@ const NavGroup = styled.nav`
 `;
 
 function MainHeader() {
-    return <HeaderContainer>
-        <HeaderInner>
-            <Logo to={"/"}>
-                <IoChatbubbles size={28} />
-                <span>토론대난투</span>
-            </Logo>
-            <NavGroup>
-                <Button color={"primary"} variant={"icon"}>
-                    <IoMoon size={20} />
-                </Button>
-                <Button color={"primary"} variant={"text"}>로그인</Button>
-                <Button color={"primary"} variant={"contained"}>회원가입</Button>
-            </NavGroup>
-        </HeaderInner>
-    </HeaderContainer>;
+    const { theme, onChangeTheme } = useContext(ThemeContext);
+
+    return (
+        <HeaderContainer>
+            <HeaderInner>
+                <Logo to={"/"}>
+                    <IoChatbubbles size={28} />
+                    <span>토론대난투</span>
+                </Logo>
+                <NavGroup>
+                    <Button color={"primary"} variant={"icon"} onClick={onChangeTheme}>
+                        {theme === "light" ? <IoSunny size={20} /> : <IoMoon size={20} />}
+                    </Button>
+                    <Button color={"primary"} variant={"text"} as={Link} to={"/auth/signin"}>
+                        로그인
+                    </Button>
+                    <Button color={"primary"} variant={"contained"} as={Link} to={"/auth/signup"}>
+                        회원가입
+                    </Button>
+                </NavGroup>
+            </HeaderInner>
+        </HeaderContainer>
+    );
 }
 
 export default MainHeader;
